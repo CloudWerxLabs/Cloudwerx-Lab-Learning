@@ -369,3 +369,8 @@ class UserBuilder {
 - **Test Runner**: Test execution tool
 - **Test Suite**: Collection of tests
 - **Test Case**: Individual test
+
+## Simple Testing for Vanilla JavaScript
+For a beginner-friendly guide specifically focused on testing vanilla JavaScript projects like this one, see:
+- [Simple Testing Guide](simple-testing-guide.md)
+- [Simple Testing Learning Resources](simple-testing-learning-resources.md)
