@@ -46,6 +46,8 @@ const docs = [
     { path: 'docs/system-design-learning-resources.md', title: 'System Design Learning Resources' },
     { path: 'docs/testing-guide.md', title: 'Testing Guide' },
     { path: 'docs/testing-learning-resources.md', title: 'Testing Learning Resources' },
+    { path: 'docs/testing-simple-guide.md', title: 'Simple Testing Guide' },
+    { path: 'docs/testing-simple-learning-resources.md', title: 'Simple Testing Learning Resources' },
     { path: 'docs/typescript-complete-guide.md', title: 'TypeScript Complete Guide' },
     { path: 'docs/typescript-guide.md', title: 'TypeScript Guide' },
     { path: 'docs/typescript-learning-resources.md', title: 'TypeScript Learning Resources' },
@@ -56,6 +58,14 @@ const docs = [
     { path: 'docs/windsurf-shortcuts.md', title: 'Windsurf Shortcuts' }
 ];
 
+// Document cache and state management
+const documentCache = new Map();
+let currentDocIndex = -1;
+let isInitialized = false;
+let isLoadingDocument = false;
+let lastLoadTime = 0;
+const LOAD_COOLDOWN = 1000; // Minimum time between loads in milliseconds
+
 // DOM Elements
 const docList = document.querySelector('.doc-list');
 const contentTitle = document.getElementById('current-doc-title');
@@ -63,9 +73,6 @@ const markdownContent = document.querySelector('.markdown-content');
 const searchInput = document.getElementById('search');
 const prevButton = document.querySelector('.prev-doc');
 const nextButton = document.querySelector('.next-doc');
-
-// Current document tracking
-let currentDocIndex = -1;
 
 // Update navigation buttons
 function updateNavButtons() {
@@ -86,7 +93,111 @@ nextButton.addEventListener('click', () => {
     }
 });
 
-// Initialize the document list
+// Load and render a document
+async function loadDocument(path) {
+    // Prevent rapid reloading
+    const now = Date.now();
+    if (isLoadingDocument || (now - lastLoadTime < LOAD_COOLDOWN)) {
+        return;
+    }
+    
+    try {
+        isLoadingDocument = true;
+        lastLoadTime = now;
+        
+        // If this is the same document that's currently loaded, don't reload
+        if (currentDocIndex !== -1 && docs[currentDocIndex].path === path) {
+            return;
+        }
+        
+        // Start fade out
+        markdownContent.classList.add('loading');
+        
+        let markdown;
+        if (documentCache.has(path)) {
+            markdown = documentCache.get(path);
+        } else {
+            const response = await fetch(path);
+            if (!response.ok) throw new Error('Failed to load document');
+            markdown = await response.text();
+            documentCache.set(path, markdown);
+        }
+        
+        // Update current document index
+        currentDocIndex = docs.findIndex(doc => doc.path === path);
+        updateNavButtons();
+        
+        // Update content
+        markdownContent.innerHTML = marked.parse(markdown);
+        
+        // Update title
+        contentTitle.textContent = docs[currentDocIndex].title;
+        
+        // Update active state in sidebar more efficiently
+        const currentActiveLink = document.querySelector('.doc-list a.active');
+        if (currentActiveLink) {
+            currentActiveLink.classList.remove('active');
+        }
+        const newActiveLink = document.querySelector(`.doc-list a[data-path="${path}"]`);
+        if (newActiveLink) {
+            newActiveLink.classList.add('active');
+        }
+        
+        // Highlight code blocks
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+        });
+        
+    } catch (error) {
+        console.error('Error loading document:', error);
+        markdownContent.innerHTML = '<div class="error">Failed to load document</div>';
+    } finally {
+        // Remove loading class and reset loading state
+        markdownContent.classList.remove('loading');
+        isLoadingDocument = false;
+    }
+}
+
+// Initialize everything
+document.addEventListener('DOMContentLoaded', () => {
+    // Only initialize once
+    if (!isInitialized) {
+        // Clear any existing intervals that might be running
+        const highestId = window.setInterval(() => {}, 0);
+        for (let i = 0; i <= highestId; i++) {
+            window.clearInterval(i);
+        }
+        
+        initializeDocList();
+        initializeSearch();
+        initializeMobileSidebar();
+        initializeTheme();
+        
+        // Load the first document by default
+        if (docs.length > 0) {
+            loadDocument(docs[0].path);
+        }
+        
+        isInitialized = true;
+    }
+});
+
+// Prevent any automatic refresh/reload behaviors
+window.onbeforeunload = () => {
+    return; // This will prevent some types of automatic reloads
+};
+
+// Clear any existing intervals when the page becomes visible
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+        const highestId = window.setInterval(() => {}, 0);
+        for (let i = 0; i <= highestId; i++) {
+            window.clearInterval(i);
+        }
+    }
+});
+
+// Initialize the document list with debouncing
 function initializeDocList() {
     const categories = {};
     
@@ -99,7 +210,7 @@ function initializeDocList() {
         categories[category].push(doc);
     });
 
-    // Create and append document links
+    // Create and append document links with debounced click handler
     Object.entries(categories).forEach(([category, categoryDocs]) => {
         const categoryElement = document.createElement('div');
         categoryElement.className = 'category';
@@ -113,15 +224,26 @@ function initializeDocList() {
             link.href = '#';
             link.textContent = doc.title;
             link.setAttribute('data-path', doc.path);
+            
+            // Debounced click handler
+            let clickTimeout;
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 
-                // Remove active class from all links and add to clicked one
-                document.querySelectorAll('.doc-list a').forEach(a => a.classList.remove('active'));
-                link.classList.add('active');
+                // Clear any pending click
+                if (clickTimeout) {
+                    clearTimeout(clickTimeout);
+                }
                 
-                // Load the document
-                loadDocument(doc.path);
+                // Debounce the click
+                clickTimeout = setTimeout(() => {
+                    // Remove active class from all links and add to clicked one
+                    document.querySelectorAll('.doc-list a').forEach(a => a.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    // Load the document
+                    loadDocument(doc.path);
+                }, 100);
             });
             docLinks.appendChild(link);
         });
@@ -129,56 +251,6 @@ function initializeDocList() {
         categoryElement.appendChild(docLinks);
         docList.appendChild(categoryElement);
     });
-}
-
-// Load and render a document
-async function loadDocument(path) {
-    try {
-        // Start fade out
-        markdownContent.classList.add('loading');
-        
-        // Short delay for animation
-        await new Promise(resolve => setTimeout(resolve, 200));
-        
-        const response = await fetch(path);
-        if (!response.ok) throw new Error('Failed to load document');
-        
-        const markdown = await response.text();
-        
-        // Reset scroll position
-        const contentContainer = document.querySelector('.content');
-        if (contentContainer) {
-            contentContainer.scrollTop = 0;
-        }
-        
-        // Update current document index
-        currentDocIndex = docs.findIndex(doc => doc.path === path);
-        updateNavButtons();
-        
-        // Update content
-        markdownContent.innerHTML = marked.parse(markdown);
-        
-        // Update title
-        contentTitle.textContent = docs[currentDocIndex].title;
-        
-        // Update active state in sidebar
-        document.querySelectorAll('.doc-list a').forEach(link => {
-            link.classList.toggle('active', link.getAttribute('data-path') === path);
-        });
-        
-        // Highlight code blocks
-        document.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightBlock(block);
-        });
-        
-        // Remove loading class to trigger fade in
-        markdownContent.classList.remove('loading');
-        
-    } catch (error) {
-        console.error('Error loading document:', error);
-        markdownContent.innerHTML = '<div class="error">Failed to load document</div>';
-        markdownContent.classList.remove('loading');
-    }
 }
 
 // Search functionality
@@ -239,16 +311,3 @@ function updateHighlightTheme(theme) {
     
     highlightTheme.href = theme === 'dark' ? darkTheme : lightTheme;
 }
-
-// Initialize everything
-document.addEventListener('DOMContentLoaded', () => {
-    initializeDocList();
-    initializeSearch();
-    initializeMobileSidebar();
-    initializeTheme();
-    
-    // Load the first document by default
-    if (docs.length > 0) {
-        loadDocument(docs[0].path);
-    }
-});
