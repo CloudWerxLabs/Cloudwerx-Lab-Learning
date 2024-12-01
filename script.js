@@ -61,6 +61,30 @@ const docList = document.querySelector('.doc-list');
 const contentTitle = document.getElementById('current-doc-title');
 const markdownContent = document.querySelector('.markdown-content');
 const searchInput = document.getElementById('search');
+const prevButton = document.querySelector('.prev-doc');
+const nextButton = document.querySelector('.next-doc');
+
+// Current document tracking
+let currentDocIndex = -1;
+
+// Update navigation buttons
+function updateNavButtons() {
+    prevButton.disabled = currentDocIndex <= 0;
+    nextButton.disabled = currentDocIndex >= docs.length - 1;
+}
+
+// Navigation event handlers
+prevButton.addEventListener('click', () => {
+    if (currentDocIndex > 0) {
+        loadDocument(docs[currentDocIndex - 1].path);
+    }
+});
+
+nextButton.addEventListener('click', () => {
+    if (currentDocIndex < docs.length - 1) {
+        loadDocument(docs[currentDocIndex + 1].path);
+    }
+});
 
 // Initialize the document list
 function initializeDocList() {
@@ -127,12 +151,20 @@ async function loadDocument(path) {
             contentContainer.scrollTop = 0;
         }
         
+        // Update current document index
+        currentDocIndex = docs.findIndex(doc => doc.path === path);
+        updateNavButtons();
+        
         // Update content
         markdownContent.innerHTML = marked.parse(markdown);
         
         // Update title
-        const doc = docs.find(d => d.path === path);
-        contentTitle.textContent = doc.title;
+        contentTitle.textContent = docs[currentDocIndex].title;
+        
+        // Update active state in sidebar
+        document.querySelectorAll('.doc-list a').forEach(link => {
+            link.classList.toggle('active', link.getAttribute('data-path') === path);
+        });
         
         // Highlight code blocks
         document.querySelectorAll('pre code').forEach((block) => {

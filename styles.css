@@ -500,3 +500,40 @@ body {
 .license a:hover {
     color: var(--accent-hover);
 }
+
+.nav-buttons {
+    display: flex;
+    gap: 4px;
+    margin-right: 12px;
+}
+
+.nav-button {
+    background: none;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-speed);
+}
+
+.nav-button:hover:not(:disabled) {
+    background: rgba(var(--accent-rgb), 0.1);
+    border-color: var(--accent);
+}
+
+.nav-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.nav-button svg {
+    fill: var(--accent);
+    transition: fill var(--transition-speed);
+}
+
+.nav-button:hover:not(:disabled) svg {
+    fill: var(--accent-hover);
+}
