@@ -2,6 +2,8 @@
     /* Dark theme (default) */
     --bg-primary: #1a1b26;
     --bg-secondary: #24283b;
+    --bg-secondary-rgb: 36, 40, 59;
+    --accent-rgb: 122, 162, 247;
     --text-primary: #a9b1d6;
     --text-secondary: #787c99;
     --accent: #7aa2f7;
@@ -22,6 +24,8 @@
 [data-theme="light"] {
     --bg-primary: #ffffff;
     --bg-secondary: #f5f5f5;
+    --bg-secondary-rgb: 245, 245, 245;
+    --accent-rgb: 52, 152, 219;
     --text-primary: #2c3e50;
     --text-secondary: #666666;
     --accent: #3498db;
@@ -314,12 +318,20 @@ body {
 .sidebar-footer {
     position: sticky;
     bottom: 0;
-    padding: 15px;
-    background: var(--bg-secondary);
+    padding: 10px;
+    background: rgba(var(--bg-secondary-rgb), 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border-top: 1px solid var(--border-color);
     font-size: 0.8rem;
     text-align: center;
     color: var(--text-secondary);
+    transition: all var(--transition-speed);
+}
+
+.sidebar-footer:hover {
+    background: rgba(var(--bg-secondary-rgb), 0.9);
+    box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.1);
 }
 
 .sidebar-footer a {
