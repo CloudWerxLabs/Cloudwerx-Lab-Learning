@@ -182,13 +182,49 @@ body {
 }
 
 .content-header {
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
-    background: var(--bg-primary);
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
     z-index: 10;
+    height: auto;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.content-header h2 {
+    margin: 0;
+    padding: 8px 16px;
+    color: var(--accent);
+    font-size: 1.1rem;
+    font-weight: 600;
+    animation: titleGlow 2s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.3);
+    background: linear-gradient(90deg, 
+        rgba(var(--accent-rgb), 0.8) 0%,
+        rgba(var(--accent-rgb), 1) 50%,
+        rgba(var(--accent-rgb), 0.8) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+}
+
+@keyframes titleGlow {
+    0% {
+        text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.3);
+        background-position: 0% center;
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.5);
+        background-position: 100% center;
+    }
+    100% {
+        text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.3);
+        background-position: 0% center;
+    }
 }
 
 .markdown-content {
