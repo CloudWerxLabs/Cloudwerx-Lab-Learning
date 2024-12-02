@@ -44,7 +44,7 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.6;
@@ -80,69 +80,135 @@ body {
     transform: translateZ(0);
 }
 
-.sidebar-header {
-    padding: 20px;
-    border-bottom: 1px solid var(--border-color);
+.sidebar-header,
+.content-header,
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+    position: relative;
+    background: transparent;
+    overflow: visible;
+    z-index: 1;
 }
 
-.logo-text {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-    margin-left: 12px;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-block;
+.sidebar-header::before,
+.content-header::before,
+.markdown-content h1::before,
+.markdown-content h2::before,
+.markdown-content h3::before,
+.markdown-content h4::before,
+.markdown-content h5::before,
+.markdown-content h6::before,
+.doc-list a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: linear-gradient(270deg, 
-        #ff6b6b,
-        var(--accent),
-        var(--accent-hover),
-        #4facfe,
-        var(--accent),
-        #ff6b6b
+        rgba(255, 107, 107, 0.15),
+        rgba(122, 162, 247, 0.15),
+        rgba(137, 180, 255, 0.15),
+        rgba(79, 172, 254, 0.15),
+        rgba(122, 162, 247, 0.15),
+        rgba(255, 107, 107, 0.15)
     );
-    background-size: 400% 400%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    position: relative;
-    transform: translateZ(0);
+    background-size: 400% 100%;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: -1;
     will-change: background-position;
+    transition: opacity 0.39s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.doc-list a:hover::before,
+.sidebar-header::before,
+.content-header::before,
+.markdown-content h1::before,
+.markdown-content h2::before,
+.markdown-content h3::before,
+.markdown-content h4::before,
+.markdown-content h5::before,
+.markdown-content h6::before {
+    opacity: 1;
     animation: gradientFlow 10.4s ease infinite;
 }
 
-@keyframes gradientFlow {
-    0% { background-position: 0% 50% }
-    50% { background-position: 100% 50% }
-    100% { background-position: 0% 50% }
+.sidebar-header > *,
+.content-header > *,
+.markdown-content h1 > *,
+.markdown-content h2 > *,
+.markdown-content h3 > *,
+.markdown-content h4 > *,
+.markdown-content h5 > *,
+.markdown-content h6 > * {
+    position: relative;
+    z-index: 1;
 }
 
-.logo-text::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, 
-        transparent,
-        var(--accent),
-        #4facfe,
-        var(--accent),
-        transparent
-    );
-    background-size: 200% 100%;
-    animation: shimmer 6.59s linear infinite;
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    z-index: 2;
 }
 
-@keyframes shimmer {
-    0% { background-position: -200% 0 }
-    100% { background-position: 200% 0 }
+.content-header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    margin: -20px -20px 20px -20px;
+    border-bottom: 1px solid var(--border-color);
+    z-index: 10;
+    height: auto;
+    min-height: 40px;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+    margin: 1.5em 0 1em;
+    padding: 0.5em;
+    border-radius: 6px;
+}
+
+.markdown-content h1 {
+    font-size: 2em;
+    margin-top: 0;
+}
+
+.markdown-content h2 {
+    font-size: 1.5em;
+}
+
+.markdown-content h3 {
+    font-size: 1.3em;
+}
+
+.markdown-content h4 {
+    font-size: 1.2em;
+}
+
+.markdown-content h5 {
+    font-size: 1.1em;
+}
+
+.markdown-content h6 {
+    font-size: 1em;
 }
 
 .search-container {
     position: relative;
+    z-index: 3;
 }
 
 #search {
@@ -165,7 +231,9 @@ body {
     flex: 1;
     padding: 20px;
     overflow-y: visible;
-    contain: content;  /* Contain paint/layout operations */
+    contain: content;
+    z-index: 2;
+    position: relative;
 }
 
 .doc-list a {
@@ -178,25 +246,16 @@ body {
     opacity: 0.8;
     transform: translateZ(0);
     transition: all 0.39s cubic-bezier(0.4, 0, 0.2, 1);
-    background: linear-gradient(90deg, transparent, transparent);
-    background-size: 200% 100%;
+    position: relative;
+    overflow: visible;
+    background: transparent;
+    z-index: 2;
+    pointer-events: auto;
 }
 
 .doc-list a:hover {
-    background: linear-gradient(90deg, 
-        rgba(var(--accent-rgb), 0.1),
-        rgba(var(--accent-rgb), 0.2),
-        rgba(var(--accent-rgb), 0.1)
-    );
-    background-size: 200% 100%;
     color: var(--accent);
     opacity: 1;
-    animation: linkShimmer 2.6s linear infinite;
-}
-
-@keyframes linkShimmer {
-    0% { background-position: -100% 0 }
-    100% { background-position: 100% 0 }
 }
 
 .doc-list a.active {
@@ -215,37 +274,11 @@ body {
     flex-direction: column;
 }
 
-.content-header {
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    height: auto;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-right: 16px;
-}
-
 .content-header h2 {
     margin: 0;
-    padding: 8px 16px;
-    color: var(--accent);
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.3);
-    background: linear-gradient(90deg, 
-        rgba(var(--accent-rgb), 0.8) 0%,
-        rgba(var(--accent-rgb), 1) 50%,
-        rgba(var(--accent-rgb), 0.8) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    position: relative;
-    background-size: 200% auto;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    flex: 1;
 }
 
 .theme-toggle, .nav-button {
@@ -313,15 +346,6 @@ body {
     opacity: 0.5;
 }
 
-/* Markdown Styles */
-.markdown-content h1,
-.markdown-content h2,
-.markdown-content h3,
-.markdown-content h4 {
-    color: var(--accent);
-    margin: 1.5em 0 0.5em;
-}
-
 .markdown-content p {
     margin-bottom: 1em;
 }
@@ -348,7 +372,6 @@ body {
 
 .markdown-content a:hover {
     color: var(--accent-hover);
-    text-decoration: underline;
 }
 
 /* Document Categories */
@@ -477,6 +500,46 @@ body {
 @keyframes subtleBackgroundShift {
     0%, 100% { background-position: 0% 0% }
     50% { background-position: 0% 100% }
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0 }
+    100% { background-position: 200% 0 }
+}
+
+.logo-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    margin-left: 12px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: inline-block;
+    white-space: nowrap;
+    background: linear-gradient(270deg, 
+        #ff6b6b,
+        var(--accent),
+        var(--accent-hover),
+        #4facfe,
+        var(--accent),
+        #ff6b6b
+    );
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    will-change: background-position;
+    animation: gradientFlow 10.4s ease infinite;
+    z-index: 3;
 }
 
 /* Footer */
