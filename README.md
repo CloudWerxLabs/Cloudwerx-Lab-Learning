@@ -12,6 +12,9 @@ A modern, interactive documentation platform designed to provide comprehensive l
   - Mobile-responsive design
   - Full-text search functionality
   - Categorized navigation system
+  - Modern gradient glass effects with synchronized animations
+  - Elegant Inter font integration
+  - Fixed-position footer with dynamic styling
 
 - **Comprehensive Documentation Coverage**
   - Frontend Development (HTML, CSS, JavaScript, TypeScript, React, Next.js)
@@ -26,10 +29,11 @@ A modern, interactive documentation platform designed to provide comprehensive l
 
 - **Frontend Stack**
   - HTML5 with semantic structure
-  - Modern CSS (Custom Properties, Flexbox)
+  - Modern CSS (Custom Properties, Flexbox, CSS Animations)
   - Vanilla JavaScript (ES6+)
   - [marked.js](https://marked.js.org/) for Markdown rendering
   - [highlight.js](https://highlightjs.org/) for syntax highlighting
+  - Google Fonts for typography enhancement
 
 - **Architecture**
   - Modular JavaScript organization
@@ -87,11 +91,12 @@ The `docs/` directory contains all documentation in Markdown format:
 ### Theme Customization
 
 Modify the CSS custom properties in `styles.css` to customize:
-- Color schemes
-- Typography
-- Layout dimensions
-- Transitions
+- Color schemes and gradient effects
+- Typography and font choices
+- Layout dimensions and spacing
+- Animations and transitions
 - Scrollbar appearance
+- Header and footer styling
 
 ## 🤝 Contributing
 
