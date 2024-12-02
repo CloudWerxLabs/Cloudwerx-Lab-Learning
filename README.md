@@ -4,6 +4,9 @@ A modern, interactive documentation platform designed to provide comprehensive l
 
 ![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)
 
+## CloudWerx Library w. Dark\Light Theme
+![CloudWerx Library Screenshot](https://i.imgur.com/EuAZP2O.png)
+
 ## 🌟 Features
 
 - **Interactive Documentation Reader**
