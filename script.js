@@ -13,50 +13,97 @@ marked.setOptions({
 // Document data structure
 const docs = [
     { path: 'docs/welcome.md', title: 'Welcome' },
-    { path: 'docs/backend-guide.md', title: 'Backend Guide' },
-    { path: 'docs/backend-learning-resources.md', title: 'Backend Learning Resources' },
-    { path: 'docs/css-guide.md', title: 'CSS Guide' },
-    { path: 'docs/css-learning-resources.md', title: 'CSS Learning Resources' },
-    { path: 'docs/design-patterns-guide.md', title: 'Design Patterns Guide' },
-    { path: 'docs/design-patterns-learning-resources.md', title: 'Design Patterns Learning Resources' },
-    { path: 'docs/docker-guide.md', title: 'Docker Guide' },
-    { path: 'docs/docker-learning-resources.md', title: 'Docker Learning Resources' },
-    { path: 'docs/documentation-guide.md', title: 'Documentation Guide' },
-    { path: 'docs/frontend-guide.md', title: 'Frontend Guide' },
-    { path: 'docs/frontend-learning-resources.md', title: 'Frontend Learning Resources' },
-    { path: 'docs/git-guide.md', title: 'Git Guide' },
-    { path: 'docs/git-learning-resources.md', title: 'Git Learning Resources' },
-    { path: 'docs/html-guide.md', title: 'HTML Guide' },
-    { path: 'docs/html-learning-resources.md', title: 'HTML Learning Resources' },
-    { path: 'docs/javascript-complete-guide.md', title: 'JavaScript Complete Guide' },
-    { path: 'docs/javascript-guide.md', title: 'JavaScript Guide' },
-    { path: 'docs/javascript-learning-resources.md', title: 'JavaScript Learning Resources' },
-    { path: 'docs/kubernetes-guide.md', title: 'Kubernetes Guide' },
-    { path: 'docs/kubernetes-learning-resources.md', title: 'Kubernetes Learning Resources' },
-    { path: 'docs/learning-resources.md', title: 'Learning Resources' },
-    { path: 'docs/linux-guide.md', title: 'Linux Guide' },
-    { path: 'docs/nextjs-guide.md', title: 'Next.js Guide' },
-    { path: 'docs/nextjs-learning-resources.md', title: 'Next.js Learning Resources' },
-    { path: 'docs/react-guide.md', title: 'React Guide' },
-    { path: 'docs/react-learning-resources.md', title: 'React Learning Resources' },
-    { path: 'docs/security-guide.md', title: 'Security Guide' },
-    { path: 'docs/security-learning-resources.md', title: 'Security Learning Resources' },
-    { path: 'docs/svg-guide.md', title: 'SVG Guide' },
-    { path: 'docs/svg-learning-resources.md', title: 'SVG Learning Resources' },
-    { path: 'docs/system-design-guide.md', title: 'System Design Guide' },
-    { path: 'docs/system-design-learning-resources.md', title: 'System Design Learning Resources' },
-    { path: 'docs/testing-guide.md', title: 'Testing Guide' },
-    { path: 'docs/testing-learning-resources.md', title: 'Testing Learning Resources' },
-    { path: 'docs/testing-simple-guide.md', title: 'Simple Testing Guide' },
-    { path: 'docs/testing-simple-learning-resources.md', title: 'Simple Testing Learning Resources' },
-    { path: 'docs/typescript-complete-guide.md', title: 'TypeScript Complete Guide' },
-    { path: 'docs/typescript-guide.md', title: 'TypeScript Guide' },
-    { path: 'docs/typescript-learning-resources.md', title: 'TypeScript Learning Resources' },
-    { path: 'docs/vscode-guide.md', title: 'VS Code Guide' },
-    { path: 'docs/vscode-shortcuts.md', title: 'VS Code Shortcuts' },
-    { path: 'docs/windows-shortcuts.md', title: 'Windows Shortcuts' },
-    { path: 'docs/windsurf-guide.md', title: 'Windsurf Guide' },
-    { path: 'docs/windsurf-shortcuts.md', title: 'Windsurf Shortcuts' }
+    
+    // AI Section
+    { path: 'docs/ai_workstation_guide.md', title: 'AI Workstation Guide', section: 'AI' },
+    
+    // Backend Section
+    { path: 'docs/backend-guide.md', title: 'Backend Guide', section: 'Backend' },
+    { path: 'docs/backend-learning-resources.md', title: 'Backend Learning Resources', section: 'Backend' },
+    
+    // CSS Section
+    { path: 'docs/css-guide.md', title: 'CSS Guide', section: 'CSS' },
+    { path: 'docs/css-learning-resources.md', title: 'CSS Learning Resources', section: 'CSS' },
+    
+    // Design Patterns Section
+    { path: 'docs/design-patterns-guide.md', title: 'Design Patterns Guide', section: 'Design Patterns' },
+    { path: 'docs/design-patterns-learning-resources.md', title: 'Design Patterns Learning Resources', section: 'Design Patterns' },
+    
+    // Docker Section
+    { path: 'docs/docker-guide.md', title: 'Docker Guide', section: 'Docker' },
+    { path: 'docs/docker-learning-resources.md', title: 'Docker Learning Resources', section: 'Docker' },
+    
+    // Documentation Section
+    { path: 'docs/documentation-guide.md', title: 'Documentation Guide', section: 'Documentation' },
+    
+    // Frontend Section
+    { path: 'docs/frontend-guide.md', title: 'Frontend Guide', section: 'Frontend' },
+    { path: 'docs/frontend-learning-resources.md', title: 'Frontend Learning Resources', section: 'Frontend' },
+    
+    // Git Section
+    { path: 'docs/git-guide.md', title: 'Git Guide', section: 'Git' },
+    { path: 'docs/git-learning-resources.md', title: 'Git Learning Resources', section: 'Git' },
+    
+    // HTML Section
+    { path: 'docs/html-guide.md', title: 'HTML Guide', section: 'HTML' },
+    { path: 'docs/html-learning-resources.md', title: 'HTML Learning Resources', section: 'HTML' },
+    
+    // JavaScript Section
+    { path: 'docs/javascript-complete-guide.md', title: 'JavaScript Complete Guide', section: 'JavaScript' },
+    { path: 'docs/javascript-guide.md', title: 'JavaScript Guide', section: 'JavaScript' },
+    { path: 'docs/javascript-learning-resources.md', title: 'JavaScript Learning Resources', section: 'JavaScript' },
+    
+    // Kubernetes Section
+    { path: 'docs/kubernetes-guide.md', title: 'Kubernetes Guide', section: 'Kubernetes' },
+    { path: 'docs/kubernetes-learning-resources.md', title: 'Kubernetes Learning Resources', section: 'Kubernetes' },
+    
+    // Learning Resources Section
+    { path: 'docs/learning-resources.md', title: 'Learning Resources', section: 'Learning Resources' },
+    
+    // Linux Section
+    { path: 'docs/linux-guide.md', title: 'Linux Guide', section: 'Linux' },
+    
+    // Next.js Section
+    { path: 'docs/nextjs-guide.md', title: 'Next.js Guide', section: 'Next.js' },
+    { path: 'docs/nextjs-learning-resources.md', title: 'Next.js Learning Resources', section: 'Next.js' },
+    
+    // React Section
+    { path: 'docs/react-guide.md', title: 'React Guide', section: 'React' },
+    { path: 'docs/react-learning-resources.md', title: 'React Learning Resources', section: 'React' },
+    
+    // Security Section
+    { path: 'docs/security-guide.md', title: 'Security Guide', section: 'Security' },
+    { path: 'docs/security-learning-resources.md', title: 'Security Learning Resources', section: 'Security' },
+    
+    // SVG Section
+    { path: 'docs/svg-guide.md', title: 'SVG Guide', section: 'SVG' },
+    { path: 'docs/svg-learning-resources.md', title: 'SVG Learning Resources', section: 'SVG' },
+    
+    // System Design Section
+    { path: 'docs/system-design-guide.md', title: 'System Design Guide', section: 'System Design' },
+    { path: 'docs/system-design-learning-resources.md', title: 'System Design Learning Resources', section: 'System Design' },
+    
+    // Testing Section
+    { path: 'docs/testing-guide.md', title: 'Testing Guide', section: 'Testing' },
+    { path: 'docs/testing-learning-resources.md', title: 'Testing Learning Resources', section: 'Testing' },
+    { path: 'docs/testing-simple-guide.md', title: 'Simple Testing Guide', section: 'Testing' },
+    { path: 'docs/testing-simple-learning-resources.md', title: 'Simple Testing Learning Resources', section: 'Testing' },
+    
+    // TypeScript Section
+    { path: 'docs/typescript-complete-guide.md', title: 'TypeScript Complete Guide', section: 'TypeScript' },
+    { path: 'docs/typescript-guide.md', title: 'TypeScript Guide', section: 'TypeScript' },
+    { path: 'docs/typescript-learning-resources.md', title: 'TypeScript Learning Resources', section: 'TypeScript' },
+    
+    // VS Code Section
+    { path: 'docs/vscode-guide.md', title: 'VS Code Guide', section: 'VS Code' },
+    { path: 'docs/vscode-shortcuts.md', title: 'VS Code Shortcuts', section: 'VS Code' },
+    
+    // Windows Section
+    { path: 'docs/windows-shortcuts.md', title: 'Windows Shortcuts', section: 'Windows' },
+    
+    // Windsurf Section
+    { path: 'docs/windsurf-guide.md', title: 'Windsurf Guide', section: 'Windsurf' },
+    { path: 'docs/windsurf-shortcuts.md', title: 'Windsurf Shortcuts', section: 'Windsurf' }
 ];
 
 // Document cache and state management
@@ -175,29 +222,30 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
-// Initialize the document list with debouncing
+// Initialize the document list
 function initializeDocList() {
-    const categories = {};
+    docList.innerHTML = '';
     
-    // Group documents by category
+    // Group documents by section
+    const sections = new Map();
     docs.forEach(doc => {
-        const category = doc.path.split('/')[1].split('-')[0];
-        if (!categories[category]) {
-            categories[category] = [];
+        const section = doc.section || 'General';
+        if (!sections.has(section)) {
+            sections.set(section, []);
         }
-        categories[category].push(doc);
+        sections.get(section).push(doc);
     });
-
-    // Create and append document links with debounced click handler
-    Object.entries(categories).forEach(([category, categoryDocs]) => {
-        const categoryElement = document.createElement('div');
-        categoryElement.className = 'category';
-        categoryElement.innerHTML = `<h3>${category.charAt(0).toUpperCase() + category.slice(1)}</h3>`;
+    
+    // Create section groups
+    sections.forEach((sectionDocs, sectionName) => {
+        // Create section header
+        const sectionHeader = document.createElement('div');
+        sectionHeader.className = 'section-header';
+        sectionHeader.textContent = sectionName;
+        docList.appendChild(sectionHeader);
         
-        const docLinks = document.createElement('div');
-        docLinks.className = 'category-docs';
-        
-        categoryDocs.forEach(doc => {
+        // Create section links
+        sectionDocs.forEach(doc => {
             const link = document.createElement('a');
             link.href = '#';
             link.textContent = doc.title;
@@ -223,11 +271,8 @@ function initializeDocList() {
                     loadDocument(doc.path);
                 }, 100);
             });
-            docLinks.appendChild(link);
+            docList.appendChild(link);
         });
-        
-        categoryElement.appendChild(docLinks);
-        docList.appendChild(categoryElement);
     });
 }
 
