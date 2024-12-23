@@ -371,3 +371,51 @@ function updateHighlightTheme(theme) {
     
     highlightTheme.href = theme === 'dark' ? darkTheme : lightTheme;
 }
+
+// Handle anchor link clicks for smooth scrolling
+document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link) return;
+
+    const href = link.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+
+    e.preventDefault();
+    const targetId = href.slice(1);
+    const targetElement = document.getElementById(targetId);
+    
+    if (targetElement) {
+        const headerOffset = 80; // Adjust based on your fixed header height
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+        });
+
+        // Update URL without scrolling
+        history.pushState(null, null, href);
+    }
+});
+
+// Handle initial hash in URL
+window.addEventListener('load', () => {
+    if (window.location.hash) {
+        const targetId = window.location.hash.slice(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+            setTimeout(() => {
+                const headerOffset = 80;
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }, 100); // Small delay to ensure content is loaded
+        }
+    }
+});
