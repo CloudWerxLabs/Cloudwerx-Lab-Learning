@@ -172,16 +172,38 @@ body {
     background: var(--bg-primary);  /* Match background */
 }
 
+.markdown-content {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    flex: 1;
+}
+
 .markdown-content h1,
 .markdown-content h2,
 .markdown-content h3,
 .markdown-content h4,
 .markdown-content h5,
 .markdown-content h6 {
+    position: relative;
     margin: 1.5em 0 1em;
     padding: 0.5em;
     border-radius: 6px;
-    scroll-margin-top: 80px; /* Account for fixed header */
+}
+
+.markdown-content h1::before,
+.markdown-content h2::before,
+.markdown-content h3::before,
+.markdown-content h4::before,
+.markdown-content h5::before,
+.markdown-content h6::before {
+    content: '';
+    display: block;
+    height: 80px;
+    margin: -80px 0 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .markdown-content h1 {
@@ -202,12 +224,15 @@ body {
     font-size: 1.2em;
 }
 
-.markdown-content h5 {
-    font-size: 1.1em;
+.markdown-content a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color 0.2s;
 }
 
-.markdown-content h6 {
-    font-size: 1em;
+.markdown-content a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
 }
 
 .search-container {
@@ -281,6 +306,7 @@ body {
     margin: 0;    /* Remove margin */
     height: 100vh;
     scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
     display: flex;
     flex-direction: column;
 }
