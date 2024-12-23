@@ -12,6 +12,7 @@ marked.setOptions({
 
 // Document data structure
 const docs = [
+    { path: 'docs/welcome.md', title: 'Welcome' },
     { path: 'docs/backend-guide.md', title: 'Backend Guide' },
     { path: 'docs/backend-learning-resources.md', title: 'Backend Learning Resources' },
     { path: 'docs/css-guide.md', title: 'CSS Guide' },
@@ -173,10 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeMobileSidebar();
         initializeTheme();
         
-        // Load the first document by default
-        if (docs.length > 0) {
-            loadDocument(docs[0].path);
-        }
+        // Load welcome message by default
+        loadDocument('docs/welcome.md');
         
         isInitialized = true;
     }

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloudwerx SVG Editor Suite</title>
+    <style>
+        :root {
+            --bg-primary: #1a1b26;
+            --bg-secondary: #24283b;
+            --text-primary: #a9b1d6;
+            --text-secondary: #787c99;
+            --accent: #7aa2f7;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            height: 100vh;
+            gap: 1px;
+            background: var(--bg-secondary);
+        }
+
+        .tools-panel, .properties-panel {
+            background: var(--bg-primary);
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .canvas-container {
+            background: var(--bg-primary);
+            overflow: auto;
+            position: relative;
+        }
+
+        .toolbar {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            gap: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .tool-group {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-group h3 {
+            margin-top: 0;
+            color: var(--accent);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        button {
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 4px;
+            background: var(--bg-secondary);
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            border-radius: 4px;
+        }
+
+        label {
+            display: block;
+            margin: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        .color-picker {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .color-swatch {
+            width: 100%;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .element-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            padding: 0.5rem;
+        }
+
+        .element-item {
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 0.25rem;
+        }
+
+        .element-item:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .zoom-controls {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            gap: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        #svg-canvas {
+            min-width: 100%;
+            min-height: 100%;
+        }
+
+        .property-group {
+            margin-bottom: 1rem;
+        }
+
+        .grid-toggle {
+            margin: 1rem 0;
+        }
+
+        .snap-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .history-panel {
+            margin-top: 1rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .history-item {
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .history-item:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tools Panel -->
+        <div class="tools-panel">
+            <div class="tool-group">
+                <h3>Basic Shapes</h3>
+                <button onclick="addRect()">Rectangle</button>
+                <button onclick="addCircle()">Circle</button>
+                <button onclick="addLine()">Line</button>
+                <button onclick="addText()">Text</button>
+            </div>
+
+            <div class="tool-group">
+                <h3>Colors</h3>
+                <label>Fill Color</label>
+                <input type="color" id="fillColor" value="#7aa2f7">
+                <label>Stroke Color</label>
+                <input type="color" id="strokeColor" value="#a9b1d6">
+                <div class="color-picker">
+                    <div class="color-swatch" style="background: #7aa2f7"></div>
+                    <div class="color-swatch" style="background: #a9b1d6"></div>
+                    <div class="color-swatch" style="background: #1a1b26"></div>
+                    <div class="color-swatch" style="background: #24283b"></div>
+                </div>
+            </div>
+
+            <div class="tool-group">
+                <h3>Dimensions</h3>
+                <label>Width</label>
+                <input type="number" id="elementWidth" value="100">
+                <label>Height</label>
+                <input type="number" id="elementHeight" value="100">
+                <label>Border Radius</label>
+                <input type="number" id="borderRadius" value="0">
+            </div>
+
+            <div class="tool-group">
+                <h3>Effects</h3>
+                <button onclick="addDropShadow()">Add Shadow</button>
+                <button onclick="addGradient()">Add Gradient</button>
+                <button onclick="addPattern()">Add Pattern</button>
+            </div>
+        </div>
+
+        <!-- Canvas Area -->
+        <div class="canvas-container">
+            <div class="toolbar">
+                <button onclick="undo()">Undo</button>
+                <button onclick="redo()">Redo</button>
+                <button onclick="group()">Group</button>
+                <button onclick="ungroup()">Ungroup</button>
+                <button onclick="bringForward()">Bring Forward</button>
+                <button onclick="sendBackward()">Send Backward</button>
+                <button onclick="duplicate()">Duplicate</button>
+                <button onclick="remove()">Delete</button>
+            </div>
+            
+            <object id="svg-canvas" data="detailed-layout.svg" type="image/svg+xml">
+                Your browser does not support SVG
+            </object>
+
+            <div class="zoom-controls">
+                <button onclick="zoomIn()">+</button>
+                <button onclick="resetZoom()">100%</button>
+                <button onclick="zoomOut()">-</button>
+            </div>
+        </div>
+
+        <!-- Properties Panel -->
+        <div class="properties-panel">
+            <div class="tool-group">
+                <h3>Element Properties</h3>
+                <label>ID</label>
+                <input type="text" id="elementId">
+                <label>Class</label>
+                <input type="text" id="elementClass">
+                <label>Transform</label>
+                <input type="text" id="elementTransform">
+            </div>
+
+            <div class="tool-group">
+                <h3>Position</h3>
+                <label>X</label>
+                <input type="number" id="posX">
+                <label>Y</label>
+                <input type="number" id="posY">
+                <div class="snap-controls">
+                    <button onclick="toggleSnap()">Snap to Grid</button>
+                    <input type="number" id="gridSize" value="10">
+                </div>
+            </div>
+
+            <div class="tool-group">
+                <h3>Style</h3>
+                <label>Opacity</label>
+                <input type="number" id="opacity" min="0" max="1" step="0.1" value="1">
+                <label>Stroke Width</label>
+                <input type="number" id="strokeWidth" value="1">
+            </div>
+
+            <div class="element-list">
+                <div class="element-item">Rectangle #1</div>
+                <div class="element-item">Circle #1</div>
+                <div class="element-item">Text #1</div>
+            </div>
+
+            <div class="history-panel">
+                <h3>History</h3>
+                <div class="history-item">Added Rectangle</div>
+                <div class="history-item">Modified Color</div>
+                <div class="history-item">Added Shadow</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // SVG manipulation functions
+        function addRect() {
+            // Implementation for adding rectangle
+        }
+
+        function addCircle() {
+            // Implementation for adding circle
+        }
+
+        function addLine() {
+            // Implementation for adding line
+        }
+
+        function addText() {
+            // Implementation for adding text
+        }
+
+        function addDropShadow() {
+            // Implementation for adding drop shadow
+        }
+
+        function addGradient() {
+            // Implementation for adding gradient
+        }
+
+        function addPattern() {
+            // Implementation for adding pattern
+        }
+
+        function undo() {
+            // Implementation for undo
+        }
+
+        function redo() {
+            // Implementation for redo
+        }
+
+        function group() {
+            // Implementation for grouping elements
+        }
+
+        function ungroup() {
+            // Implementation for ungrouping elements
+        }
+
+        function bringForward() {
+            // Implementation for bringing element forward
+        }
+
+        function sendBackward() {
+            // Implementation for sending element backward
+        }
+
+        function duplicate() {
+            // Implementation for duplicating element
+        }
+
+        function remove() {
+            // Implementation for removing element
+        }
+
+        function zoomIn() {
+            // Implementation for zoom in
+        }
+
+        function zoomOut() {
+            // Implementation for zoom out
+        }
+
+        function resetZoom() {
+            // Implementation for reset zoom
+        }
+
+        function toggleSnap() {
+            // Implementation for toggle snap to grid
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const svgCanvas = document.getElementById('svg-canvas');
+            const fillColor = document.getElementById('fillColor');
+            const strokeColor = document.getElementById('strokeColor');
+            
+            // Add event listeners for color changes
+            fillColor.addEventListener('change', function(e) {
+                // Implementation for fill color change
+            });
+
+            strokeColor.addEventListener('change', function(e) {
+                // Implementation for stroke color change
+            });
+
+            // Add event listeners for dimension changes
+            document.getElementById('elementWidth').addEventListener('change', function(e) {
+                // Implementation for width change
+            });
+
+            document.getElementById('elementHeight').addEventListener('change', function(e) {
+                // Implementation for height change
+            });
+
+            // Initialize the editor
+            initEditor();
+        });
+
+        function initEditor() {
+            // Editor initialization code
+        }
+    </script>
+</body>
+</html>

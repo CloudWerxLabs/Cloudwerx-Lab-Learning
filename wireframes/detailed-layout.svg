@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+    <!-- Definitions -->
+    <defs>
+        <linearGradient id="sidebarGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#1a1b26;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#24283b;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="buttonGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#7aa2f7;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#6889d5;stop-opacity:1" />
+        </linearGradient>
+        <filter id="dropShadow">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+            <feOffset dx="0" dy="1" result="offsetblur"/>
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.2"/>
+            </feComponentTransfer>
+            <feMerge> 
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/> 
+            </feMerge>
+        </filter>
+        <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#2a2e3f" stroke-width="0.5"/>
+        </pattern>
+    </defs>
+
+    <!-- Background Grid -->
+    <rect x="0" y="0" width="1200" height="800" fill="url(#grid)"/>
+    
+    <!-- Main Container -->
+    <rect x="0" y="0" width="1200" height="800" fill="#1a1b26" fill-opacity="0.97"/>
+    
+    <!-- Sidebar -->
+    <rect x="0" y="0" width="300" height="800" fill="url(#sidebarGradient)" filter="url(#dropShadow)"/>
+    
+    <!-- Sidebar Header -->
+    <rect x="20" y="20" width="260" height="40" fill="#24283b" rx="5"/>
+    <text x="40" y="45" fill="#a9b1d6" font-family="Arial" font-size="20" font-weight="bold">Cloudwerx Library</text>
+    
+    <!-- Search Container -->
+    <rect x="20" y="80" width="260" height="40" fill="#24283b" rx="5" stroke="#7aa2f7" stroke-width="1"/>
+    <text x="35" y="105" fill="#787c99" font-family="Arial" font-size="14">🔍 Search docs...</text>
+    
+    <!-- Document List Area -->
+    <rect x="20" y="140" width="260" height="580" fill="#24283b" rx="5"/>
+    
+    <!-- Document Items -->
+    <g id="doc-items">
+        <!-- Active Document -->
+        <rect x="25" y="150" width="250" height="40" fill="#7aa2f7" fill-opacity="0.1" rx="3"/>
+        <text x="45" y="175" fill="#7aa2f7" font-family="Arial" font-size="14">📄 Getting Started</text>
+        
+        <!-- Other Documents -->
+        <text x="45" y="225" fill="#a9b1d6" font-family="Arial" font-size="14">📄 Installation Guide</text>
+        <text x="45" y="265" fill="#a9b1d6" font-family="Arial" font-size="14">📄 API Reference</text>
+        <text x="45" y="305" fill="#a9b1d6" font-family="Arial" font-size="14">📄 Configuration</text>
+        <text x="45" y="345" fill="#a9b1d6" font-family="Arial" font-size="14">📄 Best Practices</text>
+        <text x="45" y="385" fill="#a9b1d6" font-family="Arial" font-size="14">📄 Troubleshooting</text>
+        
+        <!-- Folder Structure -->
+        <text x="35" y="425" fill="#787c99" font-family="Arial" font-size="12">📁 Advanced Topics</text>
+        <text x="55" y="455" fill="#a9b1d6" font-family="Arial" font-size="14">📄 Security</text>
+        <text x="55" y="485" fill="#a9b1d6" font-family="Arial" font-size="14">📄 Performance</text>
+    </g>
+    
+    <!-- Sidebar Footer -->
+    <rect x="20" y="740" width="260" height="40" fill="#24283b" rx="5"/>
+    <text x="40" y="765" fill="#787c99" font-family="Arial" font-size="12">Made with </text>
+    <text x="95" y="765" fill="#ff6b6b" font-family="Arial" font-size="12">♥</text>
+    <text x="110" y="765" fill="#787c99" font-family="Arial" font-size="12"> by </text>
+    <text x="130" y="765" fill="#7aa2f7" font-family="Arial" font-size="12">CLOUDWERX LAB</text>
+    
+    <!-- Main Content Area -->
+    <rect x="300" y="0" width="900" height="800" fill="#1a1b26"/>
+    
+    <!-- Content Header -->
+    <rect x="320" y="20" width="860" height="50" fill="#24283b" rx="5" filter="url(#dropShadow)"/>
+    
+    <!-- Navigation Buttons -->
+    <rect x="340" y="30" width="80" height="30" fill="url(#buttonGradient)" rx="15" opacity="0.5"/>
+    <text x="365" y="50" fill="#ffffff" font-family="Arial" font-size="12">← Prev</text>
+    
+    <rect x="430" y="30" width="80" height="30" fill="url(#buttonGradient)" rx="15"/>
+    <text x="455" y="50" fill="#ffffff" font-family="Arial" font-size="12">Next →</text>
+    
+    <!-- Theme Toggle -->
+    <circle cx="1140" cy="45" r="15" fill="#24283b" stroke="#7aa2f7" stroke-width="2"/>
+    <path d="M 1133 45 A 7 7 0 0 1 1147 45" fill="none" stroke="#7aa2f7" stroke-width="2"/>
+    
+    <!-- Content Area -->
+    <rect x="320" y="90" width="860" height="690" fill="#24283b" rx="5" filter="url(#dropShadow)"/>
+    
+    <!-- Markdown Content -->
+    <rect x="340" y="110" width="820" height="650" fill="#1a1b26" rx="5"/>
+    
+    <!-- Document Title -->
+    <text x="360" y="150" fill="#a9b1d6" font-family="Arial" font-size="24" font-weight="bold">Getting Started</text>
+    
+    <!-- Content Sections -->
+    <text x="360" y="190" fill="#a9b1d6" font-family="Arial" font-size="16">Quick Start Guide</text>
+    <text x="360" y="220" fill="#787c99" font-family="Arial" font-size="14">Follow these steps to get up and running with Cloudwerx Lab:</text>
+    
+    <!-- Code Block -->
+    <rect x="360" y="240" width="780" height="100" fill="rgba(255,255,255,0.1)" rx="5"/>
+    <text x="380" y="270" fill="#7aa2f7" font-family="monospace" font-size="12">$ npm install cloudwerx-lab</text>
+    <text x="380" y="290" fill="#a9b1d6" font-family="monospace" font-size="12">$ cloudwerx init my-project</text>
+    <text x="380" y="310" fill="#98c379" font-family="monospace" font-size="12"># Project initialized successfully!</text>
+    
+    <!-- List Items -->
+    <circle cx="375" y="350" r="3" fill="#7aa2f7"/>
+    <text x="390" y="355" fill="#a9b1d6" font-family="Arial" font-size="14">Configure your environment</text>
+    
+    <circle cx="375" y="380" r="3" fill="#7aa2f7"/>
+    <text x="390" y="385" fill="#a9b1d6" font-family="Arial" font-size="14">Set up authentication</text>
+    
+    <circle cx="375" y="410" r="3" fill="#7aa2f7"/>
+    <text x="390" y="415" fill="#a9b1d6" font-family="Arial" font-size="14">Deploy your first application</text>
+    
+    <!-- Info Box -->
+    <rect x="360" y="440" width="780" height="80" fill="rgba(122,162,247,0.1)" rx="5" stroke="#7aa2f7" stroke-width="1"/>
+    <text x="380" y="470" fill="#7aa2f7" font-family="Arial" font-size="14" font-weight="bold">💡 Pro Tip</text>
+    <text x="380" y="495" fill="#a9b1d6" font-family="Arial" font-size="14">Use our CLI tools to automate common tasks and improve your workflow.</text>
+    
+    <!-- Table -->
+    <rect x="360" y="540" width="780" height="120" fill="rgba(255,255,255,0.05)" rx="5"/>
+    <line x1="360" y1="570" x2="1140" y2="570" stroke="#787c99" stroke-width="1"/>
+    <text x="380" y="560" fill="#7aa2f7" font-family="Arial" font-size="14">Command</text>
+    <text x="580" y="560" fill="#7aa2f7" font-family="Arial" font-size="14">Description</text>
+    
+    <text x="380" y="590" fill="#a9b1d6" font-family="Arial" font-size="14">cloudwerx init</text>
+    <text x="580" y="590" fill="#a9b1d6" font-family="Arial" font-size="14">Initialize a new project</text>
+    
+    <text x="380" y="620" fill="#a9b1d6" font-family="Arial" font-size="14">cloudwerx deploy</text>
+    <text x="580" y="620" fill="#a9b1d6" font-family="Arial" font-size="14">Deploy to production</text>
+    
+    <text x="380" y="650" fill="#a9b1d6" font-family="Arial" font-size="14">cloudwerx test</text>
+    <text x="580" y="650" fill="#a9b1d6" font-family="Arial" font-size="14">Run test suite</text>
+</svg>

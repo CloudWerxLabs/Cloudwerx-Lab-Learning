@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+    <!-- Main Container -->
+    <rect x="0" y="0" width="1200" height="800" fill="#f0f0f0"/>
+    
+    <!-- Header -->
+    <rect x="0" y="0" width="1200" height="60" fill="#2c3e50"/>
+    <circle cx="40" cy="30" r="20" fill="#3498db"/> <!-- Home Icon -->
+    <text x="80" y="35" fill="white" font-family="Arial" font-size="20">Cloudwerx Library</text>
+    <rect x="900" y="15" width="200" height="30" rx="15" fill="#34495e"/> <!-- Admin Login -->
+    
+    <!-- Sidebar -->
+    <rect x="0" y="60" width="250" height="740" fill="#2c3e50"/>
+    <rect x="20" y="80" width="210" height="30" rx="5" fill="#34495e"/> <!-- Search Bar -->
+    <rect x="20" y="130" width="210" height="600" fill="#34495e"/> <!-- Navigation Menu -->
+    
+    <!-- Main Content Area -->
+    <rect x="250" y="60" width="950" height="740" fill="white"/>
+    
+    <!-- Loading Animation Placeholder -->
+    <circle cx="725" cy="400" r="50" fill="none" stroke="#3498db" stroke-width="8">
+        <animate attributeName="stroke-dasharray" from="0,157" to="157,157" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Admin Backend Overlay (Hidden by Default) -->
+    <rect x="300" y="100" width="850" height="660" fill="#ecf0f1" opacity="0.9" style="display:none"/>
+    
+    <!-- Tracking System Components -->
+    <rect x="300" y="100" width="250" height="150" rx="10" fill="#bdc3c7" opacity="0.5"/>
+    <rect x="600" y="100" width="250" height="150" rx="10" fill="#bdc3c7" opacity="0.5"/>
+    <rect x="900" y="100" width="250" height="150" rx="10" fill="#bdc3c7" opacity="0.5"/>
+    
+    <!-- Legend -->
+    <rect x="20" y="750" width="210" height="30" fill="#34495e"/>
+    <text x="30" y="770" fill="white" font-family="Arial" font-size="12">© Cloudwerx Lab</text>
+</svg>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Editor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.1.2/svg.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #1a1b26;
+            --bg-secondary: #24283b;
+            --accent: #7aa2f7;
+            --text-primary: #a9b1d6;
+            --text-secondary: #787c99;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            height: calc(100vh - 40px);
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        .tools-panel {
+            width: 250px;
+            min-width: 250px;
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-right: 1px solid var(--bg-secondary);
+            overflow-y: auto;
+        }
+
+        .canvas-container {
+            flex: 1;
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .properties-panel {
+            width: 250px;
+            min-width: 250px;
+            background: var(--bg-primary);
+            padding: 1rem;
+            border-left: 1px solid var(--bg-secondary);
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+
+        #drawing-area {
+            width: 1200px;
+            height: 800px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .property-group {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .property-group label {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            display: block;
+        }
+
+        .property-group input {
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 4px;
+            width: 100%;
+            display: block;
+        }
+
+        .property-group input[type="color"] {
+            height: 40px;
+            padding: 2px;
+        }
+
+        .property-group input[type="range"] {
+            padding: 0;
+        }
+
+        .tool-group {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .tool-group h3 {
+            color: var(--accent);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .properties-panel button {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        button {
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        button.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 4px;
+            background: var(--bg-secondary);
+            cursor: pointer;
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            border-radius: 4px;
+        }
+
+        label {
+            display: block;
+            margin: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+
+        .color-picker {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .color-swatch {
+            width: 100%;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid var(--text-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.1);
+        }
+
+        .element-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            padding: 0.5rem;
+        }
+
+        .element-item {
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .element-item:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .element-item.selected {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .zoom-controls {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            gap: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .history-panel {
+            margin-top: 1rem;
+        }
+
+        .history-item {
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .history-item:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        .history-item.current {
+            background: var(--accent);
+            color: var(--bg-primary);
+        }
+
+        /* Loading spinner */
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .tooltip {
+            position: absolute;
+            background: var(--bg-secondary);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 1000;
+        }
+
+        button:hover + .tooltip {
+            opacity: 1;
+        }
+
+        .menu-bar {
+            background: var(--bg-primary);
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--bg-secondary);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .menu-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            padding: 0 0.5rem;
+            border-right: 1px solid var(--bg-secondary);
+        }
+
+        .menu-group:last-child {
+            border-right: none;
+        }
+
+        .menu-button {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .menu-button:hover {
+            background: var(--bg-secondary);
+        }
+
+        [data-tooltip] {
+            position: relative;
+        }
+
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-bar">
+        <div class="menu-group">
+            <button class="menu-button" id="newFile" data-tooltip="Create new file (Ctrl+N)">
+                <i class="fas fa-file"></i> New
+            </button>
+            <button class="menu-button" id="openFile" data-tooltip="Open file (Ctrl+O)">
+                <i class="fas fa-folder-open"></i> Open
+            </button>
+            <button class="menu-button" id="saveFile" data-tooltip="Save file (Ctrl+S)">
+                <i class="fas fa-save"></i> Save
+            </button>
+        </div>
+        <div class="menu-group">
+            <button class="menu-button" id="undo" data-tooltip="Undo last action (Ctrl+Z)">
+                <i class="fas fa-undo"></i> Undo
+            </button>
+            <button class="menu-button" id="redo" data-tooltip="Redo last action (Ctrl+Y)">
+                <i class="fas fa-redo"></i> Redo
+            </button>
+        </div>
+        <div class="menu-group">
+            <button class="menu-button" id="zoomIn" data-tooltip="Zoom in (Ctrl++)">
+                <i class="fas fa-search-plus"></i> Zoom In
+            </button>
+            <button class="menu-button" id="zoomOut" data-tooltip="Zoom out (Ctrl--)">
+                <i class="fas fa-search-minus"></i> Zoom Out
+            </button>
+            <button class="menu-button" id="resetZoom" data-tooltip="Reset zoom (Ctrl+0)">
+                <i class="fas fa-compress-arrows-alt"></i> Reset
+            </button>
+        </div>
+        <div class="menu-group">
+            <button class="menu-button" id="gridToggle" data-tooltip="Toggle grid (Ctrl+G)">
+                <i class="fas fa-border-all"></i> Grid
+            </button>
+            <button class="menu-button" id="snapToggle" data-tooltip="Toggle snap to grid (Ctrl+Shift+S)">
+                <i class="fas fa-magnet"></i> Snap
+            </button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="tools-panel">
+            <div class="tool-group">
+                <h3>Drawing Tools</h3>
+                <button class="tool active" data-tool="select" data-tooltip="Select and move shapes (V)">
+                    <i class="fas fa-mouse-pointer"></i> Select
+                </button>
+                <button class="tool" data-tool="rectangle" data-tooltip="Draw rectangle (R)">
+                    <i class="far fa-square"></i> Rectangle
+                </button>
+                <button class="tool" data-tool="circle" data-tooltip="Draw circle (C)">
+                    <i class="far fa-circle"></i> Circle
+                </button>
+                <button class="tool" data-tool="line" data-tooltip="Draw line (L)">
+                    <i class="fas fa-minus"></i> Line
+                </button>
+                <button class="tool" data-tool="text" data-tooltip="Add text (T)">
+                    <i class="fas fa-font"></i> Text
+                </button>
+            </div>
+
+            <div class="tool-group">
+                <h3>Colors</h3>
+                <label>Fill Color</label>
+                <input type="color" id="fillColor" value="#7aa2f7">
+                <label>Stroke Color</label>
+                <input type="color" id="strokeColor" value="#a9b1d6">
+                <div class="color-picker">
+                    <div class="color-swatch" style="background: #7aa2f7"></div>
+                    <div class="color-swatch" style="background: #a9b1d6"></div>
+                    <div class="color-swatch" style="background: #1a1b26"></div>
+                    <div class="color-swatch" style="background: #24283b"></div>
+                </div>
+            </div>
+
+            <div class="tool-group">
+                <h3>Dimensions</h3>
+                <label>Width</label>
+                <input type="number" id="elementWidth" value="100">
+                <label>Height</label>
+                <input type="number" id="elementHeight" value="100">
+                <label>Border Radius</label>
+                <input type="number" id="borderRadius" value="0">
+            </div>
+
+            <div class="tool-group">
+                <h3>Effects</h3>
+                <button onclick="editor.addDropShadow()">
+                    <i class="fas fa-cloud"></i> Add Shadow
+                </button>
+                <button onclick="editor.addGradient()">
+                    <i class="fas fa-gradient"></i> Add Gradient
+                </button>
+                <button onclick="editor.addPattern()">
+                    <i class="fas fa-th"></i> Add Pattern
+                </button>
+            </div>
+        </div>
+
+        <div class="canvas-container">
+            <div id="drawing-area"></div>
+        </div>
+
+        <div class="properties-panel">
+            <div class="tool-group">
+                <h3>Properties</h3>
+                <div class="property-group">
+                    <label data-tooltip="Change shape fill color">Fill Color</label>
+                    <input type="color" id="fillColor" value="#ffffff" data-tooltip="Change fill color">
+                </div>
+                <div class="property-group">
+                    <label data-tooltip="Change shape stroke color">Stroke Color</label>
+                    <input type="color" id="strokeColor" value="#000000" data-tooltip="Change stroke color">
+                </div>
+                <div class="property-group">
+                    <label data-tooltip="Adjust stroke width">Stroke Width</label>
+                    <input type="range" id="strokeWidth" min="1" max="10" value="2" data-tooltip="Adjust stroke width">
+                    <span id="strokeWidthValue">2px</span>
+                </div>
+            </div>
+
+            <div class="tool-group">
+                <h3>Position & Size</h3>
+                <div class="property-group">
+                    <label data-tooltip="X coordinate of shape">X Position</label>
+                    <input type="number" id="posX" value="0" data-tooltip="Change X position">
+                </div>
+                <div class="property-group">
+                    <label data-tooltip="Y coordinate of shape">Y Position</label>
+                    <input type="number" id="posY" value="0" data-tooltip="Change Y position">
+                </div>
+                <div class="property-group">
+                    <label data-tooltip="Width of shape">Width</label>
+                    <input type="number" id="width" value="100" data-tooltip="Change width">
+                </div>
+                <div class="property-group">
+                    <label data-tooltip="Height of shape">Height</label>
+                    <input type="number" id="height" value="100" data-tooltip="Change height">
+                </div>
+            </div>
+
+            <div class="tool-group">
+                <h3>Actions</h3>
+                <button id="deleteShape" data-tooltip="Delete selected shape (Delete)">
+                    <i class="fas fa-trash"></i> Delete Shape
+                </button>
+                <button id="duplicateShape" data-tooltip="Duplicate selected shape (Ctrl+D)">
+                    <i class="fas fa-copy"></i> Duplicate
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/editor.js"></script>
+</body>
+</html>
