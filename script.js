@@ -183,15 +183,36 @@ async function loadDocument(path) {
         // Update content
         contentTitle.textContent = docs[currentDocIndex].title;
         markdownContent.innerHTML = marked.parse(markdown);
-        
-        // Add click handler for the entire content area
-        markdownContent.addEventListener('click', function(e) {
-            // Check if the clicked element is an anchor with a hash
-            if (e.target.tagName === 'A' && e.target.getAttribute('href')?.startsWith('#')) {
+
+        // Add click handlers for all anchor links
+        const links = markdownContent.querySelectorAll('a[href^="#"]');
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetId = e.target.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId) || 
-                                   document.querySelector(`[id="${targetId}"]`);
+                const targetId = link.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+
+                    // Update URL without scrolling
+                    history.pushState(null, null, link.getAttribute('href'));
+                }
+            });
+        });
+        
+        // Handle initial hash in URL
+        if (window.location.hash) {
+            setTimeout(() => {
+                const targetId = window.location.hash.substring(1);
+                const targetElement = document.getElementById(targetId);
                 
                 if (targetElement) {
                     const headerOffset = 80;
@@ -203,8 +224,8 @@ async function loadDocument(path) {
                         behavior: 'smooth'
                     });
                 }
-            }
-        });
+            }, 100);
+        }
         
         // Update navigation
         updateNavButtons();
@@ -371,51 +392,3 @@ function updateHighlightTheme(theme) {
     
     highlightTheme.href = theme === 'dark' ? darkTheme : lightTheme;
 }
-
-// Handle anchor link clicks for smooth scrolling
-document.addEventListener('click', (e) => {
-    const link = e.target.closest('a');
-    if (!link) return;
-
-    const href = link.getAttribute('href');
-    if (!href || !href.startsWith('#')) return;
-
-    e.preventDefault();
-    const targetId = href.slice(1);
-    const targetElement = document.getElementById(targetId);
-    
-    if (targetElement) {
-        const headerOffset = 80; // Adjust based on your fixed header height
-        const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-        });
-
-        // Update URL without scrolling
-        history.pushState(null, null, href);
-    }
-});
-
-// Handle initial hash in URL
-window.addEventListener('load', () => {
-    if (window.location.hash) {
-        const targetId = window.location.hash.slice(1);
-        const targetElement = document.getElementById(targetId);
-        
-        if (targetElement) {
-            setTimeout(() => {
-                const headerOffset = 80;
-                const elementPosition = targetElement.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }, 100); // Small delay to ensure content is loaded
-        }
-    }
-});
