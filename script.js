@@ -3,10 +3,16 @@ const renderer = new marked.Renderer();
 
 // Override heading rendering to ensure proper ID generation
 renderer.heading = function(text, level) {
-    const id = text.toLowerCase()
+    // Remove any existing HTML tags for ID generation
+    const plainText = text.replace(/<[^>]*>/g, '');
+    
+    // Generate ID from text
+    const id = plainText
+        .toLowerCase()
         .replace(/[^\w\s-]/g, '')    // Remove special characters
         .replace(/\s+/g, '-')        // Replace spaces with hyphens
-        .replace(/-+/g, '-');        // Replace multiple hyphens with single hyphen
+        .replace(/-+/g, '-')         // Replace multiple hyphens with single hyphen
+        .replace(/^-+|-+$/g, '');    // Remove leading/trailing hyphens
     
     return `<h${level} id="${id}">${text}</h${level}>`;
 };
