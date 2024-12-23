@@ -168,6 +168,8 @@ body {
     z-index: 10;
     height: auto;
     min-height: 40px;
+    width: calc(100% + 40px);  /* Account for parent padding */
+    background: var(--bg-primary);  /* Match background */
 }
 
 .markdown-content h1,
@@ -267,10 +269,11 @@ body {
 
 .content {
     flex: 1;
-    padding: 20px;
+    padding: 20px 20px 20px 20px;
     overflow-y: auto;
-    max-width: 1600px;
-    margin: 0 auto;
+    width: 100%;  /* Take full width */
+    max-width: none;  /* Remove max-width constraint */
+    margin: 0;    /* Remove margin */
     height: 100vh;
     scroll-behavior: smooth;
     display: flex;
