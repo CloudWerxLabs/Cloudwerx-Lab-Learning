@@ -7,7 +7,9 @@ marked.setOptions({
         return hljs.highlightAuto(code).value;
     },
     breaks: true,
-    gfm: true
+    gfm: true,
+    headerIds: true,
+    mangle: false
 });
 
 // Document data structure
@@ -169,6 +171,18 @@ async function loadDocument(path) {
         contentTitle.textContent = docs[currentDocIndex].title;
         markdownContent.innerHTML = marked.parse(markdown);
         
+        // Add click handlers for anchor links
+        markdownContent.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+        
         // Update navigation
         updateNavButtons();
         
@@ -176,6 +190,16 @@ async function loadDocument(path) {
         const url = new URL(window.location);
         url.searchParams.set('doc', path);
         window.history.pushState({}, '', url);
+
+        // Handle hash in URL if present
+        if (window.location.hash) {
+            const targetElement = document.getElementById(window.location.hash.substring(1));
+            if (targetElement) {
+                setTimeout(() => {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
 
     } catch (error) {
         console.error('Error loading document:', error);
