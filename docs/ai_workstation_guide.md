@@ -1,13 +1,35 @@
 # Ultimate AI Workstation Build Guide 2024
-## High-Performance AI Development System
+
+## Table of Contents
+1. [Introduction](#introduction)
+   - [The AI Hardware Revolution](#the-ai-hardware-revolution)
+   - [Holistic Design Philosophy](#holistic-design-philosophy)
+   - [Who Should Use This Guide](#who-should-use-this-guide)
+   - [Target Specifications](#target-specifications)
+2. [System Overview](#system-overview)
+3. [Component Selection](#component-selection)
+   - [CPU Selection](#cpu-selection)
+   - [GPU Selection](#gpu-selection)
+   - [Memory Configuration](#memory-configuration)
+   - [Storage Solution](#storage-solution)
+   - [Power Supply](#power-supply)
+   - [Cooling System](#cooling-system)
+   - [Case Selection](#case-selection)
+4. [Performance Optimization](#performance-optimization)
+5. [Build Considerations](#build-considerations)
+6. [Cost Analysis](#cost-analysis)
+7. [Benchmarks](#benchmarks)
+8. [Conclusion and Future Outlook](#conclusion-and-future-outlook)
+   - [The Continuous Evolution](#the-continuous-evolution-of-ai-hardware)
+   - [Key Takeaways](#key-takeaways)
+   - [Emerging Trends](#emerging-trends-to-watch)
+   - [Final Recommendation](#final-recommendation)
 
 ## Introduction
 
-In the rapidly evolving landscape of artificial intelligence and machine learning, the hardware foundation of your development environment is not just a technical choice—it's a strategic investment. This comprehensive guide is meticulously crafted for AI professionals, researchers, and enthusiasts who demand uncompromising performance and reliability in their computational infrastructure.
-
 ### The AI Hardware Revolution
 
-The exponential growth of AI technologies has transformed computational requirements from mere specifications to critical enablers of innovation. Modern AI workstations are no longer just computers; they are sophisticated platforms that bridge theoretical algorithms with real-world computational power. Whether you're training complex neural networks, performing large-scale data analysis, or developing cutting-edge machine learning models, your hardware must not just meet, but anticipate your computational demands.
+The exponential growth of AI technologies has transformed computational requirements from mere specifications to critical enablers of innovation. Modern AI workstations are no longer just computers; they are sophisticated platforms that bridge theoretical algorithms with real-world computational power.
 
 ### Holistic Design Philosophy
 
@@ -18,7 +40,7 @@ Our approach to designing the ultimate AI workstation transcends traditional com
 - **Cost-Performance Optimization**: Delivering maximum computational power per dollar invested
 - **Future-Proofing**: Selecting components with upgrade paths and long-term viability
 
-### Who Should Use This Guide?
+### Who Should Use This Guide
 
 This guide is tailored for:
 - AI/ML Researchers and Data Scientists
@@ -26,58 +48,6 @@ This guide is tailored for:
 - Deep Learning Practitioners
 - High-Performance Computing Professionals
 - Technology Enthusiasts and Innovators
-
-Whether you're building a personal research rig, a startup's computational backbone, or an enterprise-grade AI development platform, this guide provides the insights and recommendations to make an informed decision.
-
-## Conclusion and Future Outlook
-
-### The Continuous Evolution of AI Hardware
-
-As we stand at the intersection of hardware innovation and artificial intelligence, the landscape of computational infrastructure is in a constant state of transformation. The workstation configurations outlined in this guide represent not just a snapshot of current technology, but a forward-looking perspective on the computational demands of emerging AI paradigms.
-
-### Key Takeaways
-
-1. **Flexibility is Key**: No single configuration fits all use cases. The recommended builds are starting points, not rigid prescriptions.
-2. **Invest in Scalability**: Choose components that offer clear upgrade paths and compatibility with future technologies.
-3. **Balance is Critical**: Raw performance must be balanced with power efficiency, thermal management, and total cost of ownership.
-
-### Emerging Trends to Watch
-
-- **Heterogeneous Computing**: Increasing integration of CPUs, GPUs, and specialized AI accelerators
-- **Energy-Efficient Architectures**: Growing emphasis on performance-per-watt metrics
-- **Distributed and Edge AI**: Rising importance of systems that can handle both centralized and decentralized computational models
-
-### Continuous Learning and Adaptation
-
-Technology evolves at an unprecedented pace. This guide will be periodically updated to reflect the latest advancements in AI hardware, emerging technologies, and computational strategies. We encourage readers to view this document as a living resource—a collaborative platform for sharing insights and experiences.
-
-### Final Recommendation
-
-Build your AI workstation not just for today's challenges, but with a vision for tomorrow's possibilities. Your hardware is more than a tool; it's the canvas upon which you'll paint the future of artificial intelligence.
-
-**Made with ❤️ by CLOUDWERX LAB**
-
-### Table of Contents
-1. [Introduction](#introduction)
-2. [System Overview](#system-overview)
-3. [Component Selection](#component-selection)
-   - [CPU](#cpu)
-   - [GPU](#gpu)
-   - [Motherboard](#motherboard)
-   - [Memory](#memory)
-   - [Storage](#storage)
-   - [Power Supply](#power-supply)
-   - [Cooling](#cooling)
-   - [Case](#case)
-4. [Performance Comparisons](#performance-comparisons)
-5. [Build Considerations](#build-considerations)
-6. [Cost Analysis](#cost-analysis)
-7. [Benchmarks](#benchmarks)
-8. [Alternative Configurations](#alternative-configurations)
-
-## Introduction
-
-This guide outlines the components and considerations for building a professional-grade AI workstation comparable to cloud-based L40S GPU systems. The focus is on maximum performance for AI/ML workloads, deep learning, and model training/inference.
 
 ### Target Specifications
 - Support for multiple high-end GPUs
@@ -99,6 +69,8 @@ This guide outlines the components and considerations for building a professiona
 | Power Supply      | $300-500     | High           |
 | Cooling           | $200-500     | High           |
 | Case              | $200-400     | Medium         |
+
+## Component Selection
 
 ### CPU Selection
 
