@@ -182,14 +182,7 @@ async function loadDocument(path) {
         
         // Update content
         contentTitle.textContent = docs[currentDocIndex].title;
-        const parsedContent = marked.parse(markdown);
-        markdownContent.innerHTML = parsedContent;
-        
-        // Log all header IDs for debugging
-        console.log('Available headers:');
-        markdownContent.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(header => {
-            console.log(`${header.tagName}: ${header.id} - ${header.textContent}`);
-        });
+        markdownContent.innerHTML = marked.parse(markdown);
         
         // Add click handler for the entire content area
         markdownContent.addEventListener('click', function(e) {
@@ -197,15 +190,16 @@ async function loadDocument(path) {
             if (e.target.tagName === 'A' && e.target.getAttribute('href')?.startsWith('#')) {
                 e.preventDefault();
                 const targetId = e.target.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                
-                console.log('Clicked link:', e.target.href);
-                console.log('Target ID:', targetId);
-                console.log('Found element:', targetElement);
+                const targetElement = document.getElementById(targetId) || 
+                                   document.querySelector(`[id="${targetId}"]`);
                 
                 if (targetElement) {
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
                     window.scrollTo({
-                        top: targetElement.offsetTop - 80,
+                        top: offsetPosition,
                         behavior: 'smooth'
                     });
                 }
