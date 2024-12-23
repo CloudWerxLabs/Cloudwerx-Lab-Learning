@@ -192,16 +192,30 @@ async function loadDocument(path) {
 
         // Add click handlers for all anchor links
         const links = markdownContent.querySelectorAll('a[href^="#"]');
+        console.log('Found TOC links:', links.length);
+
         links.forEach(link => {
             link.addEventListener('click', (e) => {
+                console.log('Link clicked:', link.getAttribute('href'));
                 e.preventDefault();
+                
                 const targetId = link.getAttribute('href').substring(1);
+                console.log('Looking for element with ID:', targetId);
+                
                 const targetElement = document.getElementById(targetId);
+                console.log('Found target element:', targetElement);
                 
                 if (targetElement) {
                     const headerOffset = 80;
                     const elementPosition = targetElement.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    console.log('Scroll details:', {
+                        elementPosition,
+                        pageYOffset: window.pageYOffset,
+                        headerOffset,
+                        finalPosition: offsetPosition
+                    });
                     
                     window.scrollTo({
                         top: offsetPosition,
@@ -210,8 +224,11 @@ async function loadDocument(path) {
 
                     // Update URL without scrolling
                     history.pushState(null, null, link.getAttribute('href'));
+                } else {
+                    console.warn('Target element not found');
                 }
             });
+            console.log('Added click handler to:', link.getAttribute('href'));
         });
         
         // Handle initial hash in URL
