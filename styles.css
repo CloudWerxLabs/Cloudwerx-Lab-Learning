@@ -267,8 +267,10 @@ body {
 
 .content {
     flex: 1;
-    overflow-y: auto;
     padding: 20px;
+    overflow-y: auto;
+    max-width: 1600px;
+    margin: 0 auto;
     height: 100vh;
     scroll-behavior: smooth;
     display: flex;
@@ -333,11 +335,11 @@ body {
 }
 
 .markdown-content {
-    flex: 1;
-    max-width: 800px;
+    width: 100%;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
-    width: 100%;
+    flex: 1;
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.2s ease;
