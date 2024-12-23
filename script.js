@@ -60,12 +60,10 @@ const docs = [
 ];
 
 // Document cache and state management
-const documentCache = new Map();
-let currentDocIndex = -1;
-let isInitialized = false;
 let isLoadingDocument = false;
-let lastLoadTime = 0;
-const LOAD_COOLDOWN = 1000; // Minimum time between loads in milliseconds
+let currentDocIndex = -1;
+let documentCache = new Map();
+let isInitialized = false;
 
 // DOM Elements
 const docList = document.querySelector('.doc-list');
@@ -96,24 +94,17 @@ nextButton.addEventListener('click', () => {
 
 // Load and render a document
 async function loadDocument(path) {
-    // Prevent rapid reloading
-    const now = Date.now();
-    if (isLoadingDocument || (now - lastLoadTime < LOAD_COOLDOWN)) {
-        return;
-    }
+    if (isLoadingDocument) return;
     
     try {
         isLoadingDocument = true;
-        lastLoadTime = now;
         
         // If this is the same document that's currently loaded, don't reload
         if (currentDocIndex !== -1 && docs[currentDocIndex].path === path) {
+            isLoadingDocument = false;
             return;
         }
-        
-        // Start fade out
-        markdownContent.classList.add('loading');
-        
+
         let markdown;
         if (documentCache.has(path)) {
             markdown = documentCache.get(path);
@@ -123,38 +114,26 @@ async function loadDocument(path) {
             markdown = await response.text();
             documentCache.set(path, markdown);
         }
-        
+
         // Update current document index
         currentDocIndex = docs.findIndex(doc => doc.path === path);
-        updateNavButtons();
         
         // Update content
+        contentTitle.textContent = docs[currentDocIndex].title;
         markdownContent.innerHTML = marked.parse(markdown);
         
-        // Update title
-        contentTitle.textContent = docs[currentDocIndex].title;
+        // Update navigation
+        updateNavButtons();
         
-        // Update active state in sidebar more efficiently
-        const currentActiveLink = document.querySelector('.doc-list a.active');
-        if (currentActiveLink) {
-            currentActiveLink.classList.remove('active');
-        }
-        const newActiveLink = document.querySelector(`.doc-list a[data-path="${path}"]`);
-        if (newActiveLink) {
-            newActiveLink.classList.add('active');
-        }
-        
-        // Highlight code blocks
-        document.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightBlock(block);
-        });
-        
+        // Update URL without triggering a page reload
+        const url = new URL(window.location);
+        url.searchParams.set('doc', path);
+        window.history.pushState({}, '', url);
+
     } catch (error) {
         console.error('Error loading document:', error);
-        markdownContent.innerHTML = '<div class="error">Failed to load document</div>';
+        markdownContent.innerHTML = '<p>Error loading document</p>';
     } finally {
-        // Remove loading class and reset loading state
-        markdownContent.classList.remove('loading');
         isLoadingDocument = false;
     }
 }

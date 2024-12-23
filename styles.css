@@ -344,12 +344,11 @@ body {
     padding: 20px;
     flex: 1;
     opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.2s ease;
 }
 
 .markdown-content.loading {
-    opacity: 0.5;
+    opacity: 1;
+    transform: none;
 }
 
 .markdown-content p {
