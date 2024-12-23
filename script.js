@@ -1,5 +1,18 @@
 // Configure marked.js
+const renderer = new marked.Renderer();
+
+// Override heading rendering to ensure proper ID generation
+renderer.heading = function(text, level) {
+    const id = text.toLowerCase()
+        .replace(/[^\w\s-]/g, '')    // Remove special characters
+        .replace(/\s+/g, '-')        // Replace spaces with hyphens
+        .replace(/-+/g, '-');        // Replace multiple hyphens with single hyphen
+    
+    return `<h${level} id="${id}">${text}</h${level}>`;
+};
+
 marked.setOptions({
+    renderer: renderer,
     highlight: function(code, lang) {
         if (lang && hljs.getLanguage(lang)) {
             return hljs.highlight(code, { language: lang }).value;
@@ -169,18 +182,34 @@ async function loadDocument(path) {
         
         // Update content
         contentTitle.textContent = docs[currentDocIndex].title;
-        markdownContent.innerHTML = marked.parse(markdown);
+        const parsedContent = marked.parse(markdown);
+        markdownContent.innerHTML = parsedContent;
         
-        // Add click handlers for anchor links
-        markdownContent.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+        // Log all header IDs for debugging
+        console.log('Available headers:');
+        markdownContent.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(header => {
+            console.log(`${header.tagName}: ${header.id} - ${header.textContent}`);
+        });
+        
+        // Add click handler for the entire content area
+        markdownContent.addEventListener('click', function(e) {
+            // Check if the clicked element is an anchor with a hash
+            if (e.target.tagName === 'A' && e.target.getAttribute('href')?.startsWith('#')) {
                 e.preventDefault();
-                const targetId = this.getAttribute('href').substring(1);
+                const targetId = e.target.getAttribute('href').substring(1);
                 const targetElement = document.getElementById(targetId);
+                
+                console.log('Clicked link:', e.target.href);
+                console.log('Target ID:', targetId);
+                console.log('Found element:', targetElement);
+                
                 if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
                 }
-            });
+            }
         });
         
         // Update navigation
@@ -190,16 +219,6 @@ async function loadDocument(path) {
         const url = new URL(window.location);
         url.searchParams.set('doc', path);
         window.history.pushState({}, '', url);
-
-        // Handle hash in URL if present
-        if (window.location.hash) {
-            const targetElement = document.getElementById(window.location.hash.substring(1));
-            if (targetElement) {
-                setTimeout(() => {
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-            }
-        }
 
     } catch (error) {
         console.error('Error loading document:', error);
